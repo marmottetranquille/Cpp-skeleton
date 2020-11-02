@@ -1,32 +1,28 @@
-# Prerequisites
-*.d
+# Ignore all...
+*
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# ... except the basic root ones
+!.gitignore
+!LICENSE
+!README.md
+!Makefile
 
-# Precompiled Headers
-*.gch
-*.pch
+# ... and what's useful for VSCode
+!.vscode/
+!.vscode/*.json
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# ... and what's normally util in a C++ project
+!include/
+!include/**/
+!include/**/*.hpp
+!src/
+!src/**/
+!src/**/*.cpp
+# ... including the testing part of it
+!test/
+!test/include/
+!test/include/**/
+!test/include/**/*.hpp
+!test/src/
+!test/src/**/
+!test/src/**/*.cpp
