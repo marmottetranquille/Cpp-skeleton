@@ -1,0 +1,276 @@
+{
+    "options": {
+        "env": {
+            // keep empty to use Makefile defaults
+            "VSCODEDEFOPT": "",
+            "VSCODEDBGOPT": "-g -Wall -Werror -pedantic-errors"
+        }
+    },
+    "tasks": [
+        /* For task debugging purpose only ***********************************/
+        {
+            "type": "shell",
+            "label": "Test task",
+            "command": "env",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "VSCODEDBG": "dbg"
+                }
+            },
+            "problemMatcher": []
+        },
+        /* Cleaning **********************************************************/
+        {
+            "type": "shell",
+            "label": "Clean all",
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Clean libs",
+            "command": "make",
+            "args": [
+                "cleanlibs"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Clean bins",
+            "command": "make",
+            "args": [
+                "cleanbins"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Clean tests",
+            "command": "make",
+            "args": [
+                "cleantests"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Clean system libs cache",
+            "command": "make",
+            "args": [
+                "cleansyscache"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        /* Make shared libraries *********************************************/
+        {
+            "type": "shell",
+            "label": "Make libs",
+            "command": "make",
+            "args": [
+                "libs",
+                "VSCODEDEF=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Make libs (debug)",
+            "command": "make",
+            "args": [
+                "libs",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        /* Make applications *************************************************/
+        {
+            "type": "shell",
+            "label": "Make bins",
+            "command": "make",
+            "args": [
+                "bins",
+                "VSCODEDEF=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Make bins (debug)",
+            "command": "make",
+            "args": [
+                "bins",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        /* Make application from currently selected file *********************/
+        {
+            "type": "shell",
+            "label": "Make current bin",
+            "command": "make",
+            "args": [
+                "vscode_bin",
+                "VSCODE_TGT=${file}",
+                "VSCODEDEF=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Make current bin (debug)",
+            "command": "make",
+            "args": [
+                "vscode_bin",
+                "VSCODE_TGT=${file}",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        /* Prepare application debugging framework ***************************/
+        {
+            "type": "shell",
+            "label": "Prepare bin debug",
+            "command": "make",
+            "args": [
+                "vscode_bin_predebug",
+                "VSCODE_TGT=${file}",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Clean bin debug",
+            "command": "make",
+            "args": [
+                "vscode_postbin",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        /* Make test application from currently selected file ****************/
+        {
+            "type": "shell",
+            "label": "Make current test bin",
+            "command": "make",
+            "args": [
+                "vscode_test",
+                "VSCODE_TGT=${file}",
+                "VSCODEDEF=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Make current test bin (debug)",
+            "command": "make",
+            "args": [
+                "vscode_test",
+                "VSCODE_TGT=${file}",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        /* Prepare test application debugging framework **********************/
+        {
+            "type": "shell",
+            "label": "Prepare test debug",
+            "command": "make",
+            "args": [
+                "vscode_test_predebug",
+                "VSCODE_TGT=${file}",
+                "VSCODEDBG=yes"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Clean test debug",
+            "command": "make",
+            "args": [
+                "vscode_posttest"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ],
+    "version": "2.0.0"
+}

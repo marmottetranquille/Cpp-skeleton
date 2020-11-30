@@ -13,6 +13,18 @@ SRCBIN=src/bin
 SRCTST=test/src
 CCSTD=-std=$(STD)
 
+# VSCode tasks overrides ######################################################
+ifdef VSCODENRM
+    ifdef VSCODENRMOPT
+        OPT=${VSCODENRMOPT}
+    endif
+endif
+ifdef VSCODEDBG
+    ifdef VSCODEDBGOPT
+        OPT=${VSCODEDBGOPT}
+    endif
+endif
+
 # List libraries to build #####################################################
 # list all ./src/libsomelib/ that will be compiled into ./lib/libsomelib.so
 LIBSRCDIRS:=$(patsubst %/, %, $(shell ls -d $(SRCLIB)/lib*/))
@@ -26,16 +38,37 @@ LIBSGLBS:=$(patsubst lib/lib%.so, .build/lib/lib%.so.glbs, $(LIBS))
 # prepare list of libraries undefined tables
 LIBSUNDS:=$(patsubst lib/lib%.so, .build/lib/lib%.so.unds, $(LIBS))
 
+# List programs to build ######################################################
+BINSRCDIRS:=$(patsubst %/, %, $(shell ls -d $(SRCBIN)/*/))
+BINSRCROOTS:=$(patsubst %.cpp, %, $(shell ls $(SRCBIN)/*.cpp))
+BINS:=$(patsubst $(SRCBIN)/%, bin/%, $(BINSRCDIRS) $(BINSRCROOTS))
+
 # Basic utilities #############################################################
 %/:
 	mkdir -pv $@
 
-.PHONY: clean
-clean:
-	@rm -rvf .build
+.PHONY: cleanlibs
+cleanlibs:
+	@rm -rvf .build/lib
 	@rm -rvf lib
+
+.PHONY: cleanbins
+cleanbins:
+	@rm -rvf .build/bin
 	@rm -rvf bin
+
+.PHONY: cleantests
+cleantests:
+	@rm -rvf .build/test
 	@rm -rvf test/bin
+
+.PHONY: cleansyscache
+cleansyscache:
+	@rm -rvf .build/.syscache
+
+.PHONY: clean
+clean: cleanlibs cleanbins cleantests cleansyscache
+	@rm -rvf .build
 
 .PHONY: listlibs
 listlibs:
@@ -197,6 +230,10 @@ bin/%: .build/bin/%.dl $(objs_prg)
 	@mkdir -p $(tdir)
 	$(CC) -o $@ -Wl,-rpath,'$$ORIGIN/../lib' -L$(LIB) $(filter %.o, $^) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
 
+# Make all applications
+.PHONY: bins
+bins: $(BINS)
+
 # Test application linking ####################################################
 .build/test/bin/%.udef: $(objs_tst)
 	@mkdir -p $(tdir)
@@ -213,3 +250,32 @@ test/bin/%: .build/test/bin/%.dl $(objs_tst)
 	@echo - Building test program $@ depends on $^
 	@mkdir -p $(tdir)
 	$(CC) -o $@ -Wl,-rpath,'$$ORIGIN/../../lib' -L$(LIB) $(filter %.o, $^) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
+
+
+# VSCode targets ##############################################################
+# Defines recipes called by VSCode
+vs_bin_tgt=$(shell echo $(patsubst $(CWD)/src/bin/%.cpp, %, $(VSCODE_TGT)) | cut -f1 -d '/')
+.PHONY: vscode_bin 
+vscode_bin:
+	@$(MAKE) bin/$(vs_bin_tgt)
+
+.PHONY: vscode_bin_predebug
+vscode_bin_predebug: vscode_bin
+	@ln -f bin/$(vs_bin_tgt) bin/vscode_bin
+
+.PHONY: vscode_bin_postdebug
+vscode_postbin:
+	@rm bin/vscode_bin
+
+vs_tst_tgt=$(shell echo $(patsubst $(CWD)/test/src/%.cpp, %, $(VSCODE_TGT)) | cut -f1 -d '/')
+.PHONY: vscode_test
+vscode_test:
+	@$(MAKE) test/bin/$(vs_tst_tgt)
+
+.PHONY: vscode_test_predebug
+vscode_test_predebug: vscode_test
+	@ln -f test/bin/$(vs_tst_tgt) test/bin/vscode_test
+
+.PHONY: vscode_posttest
+vscode_posttest:
+	@rm test/bin/vscode_test
