@@ -26,3 +26,7 @@
 !test/src/
 !test/src/**/
 !test/src/**/*.cpp
+
+# ... and also add documentation
+!doc/
+!doc/**/*.md
