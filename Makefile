@@ -110,7 +110,7 @@ objs_tst=$$(patsubst $(SRCTST)/$$(STEM).cpp, .build/test/bin/$$(STEM).o, $(srcs_
 # List system libraries
 SYSLIBS=$(shell strings /etc/ld.so.cache | grep ^/.*.so$$)
 # Filter defined global objects from an objdump -T of a system library
-sys_glbs_finder=grep -v "\*UND\*" | grep " g.* .bss\| g.* .data\| g.* .text"
+sys_glbs_finder=grep -v "\*UND\*" | grep "[ g |  w].* .text\|[ g |  w].* .bss\|[ g |  w].* .data"
 
 # Create individual system library global object cache
 .build/.syscache/%.glbs: /%
@@ -158,7 +158,7 @@ glbs_orig_finder=grep -l "$$pat" .build/lib/*.so.glbs $(sys_glbs)
 # Shared Library linking ######################################################
 # Primary linking using only self objects
 sym_name_cutter=rev | cut -f 1 -d' ' | rev
-glbs_finder=grep " g.* .text\| g.* .bss\| g.* .data"
+glbs_finder=grep "[ g |  w].* .text\|[ g |  w].* .bss\|[ g |  w].* .data"
 udef_finder=grep " \*UND\*"
 dl_prereq=.build/lib/lib%.so.glbs .build/lib/lib%.so.udef .build/.syscache
 
