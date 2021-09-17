@@ -1,5 +1,4 @@
 # Default settings ############################################################
-CC=g++
 STD?=c++11
 OPT?=-O3 -Wall -Werror -pedantic-errors
 CWD?=$(shell pwd)
@@ -8,10 +7,12 @@ INC?=include
 LIB?=lib
 
 # Settings that should not change #############################################
+CC=g++
 SRCLIB=src/lib
 SRCBIN=src/bin
 SRCTST=test/src
 CCSTD=-std=$(STD)
+DEFAULT_SHARED_LIST=$(shell echo "int main(void){}" | $(CC) -v -o /dev/null -xc++ - 2>&1 | sed "s: :\n:g" | grep "^\-l" | sort -r | uniq)
 
 # VSCode tasks overrides ######################################################
 ifdef VSCODENRM
@@ -179,6 +180,7 @@ dl_prereq=.build/lib/lib%.so.glbs .build/lib/lib%.so.udef .build/.syscache
 	@objdump -t $< | $(udef_finder) | $(sym_name_cutter) > $@
 
 # Create dependency list of dynamic library
+# Note: some dependencies might be overridden by default libs
 .build/lib/lib%.so.dl: $(dl_prereq)
 	@echo - Building local dynamic dependency list for $(patsubst .build/%.so.dl, %.so, $@)
 	@$(MAKE) $@.0 
@@ -190,7 +192,7 @@ dl_prereq=.build/lib/lib%.so.glbs .build/lib/lib%.so.udef .build/.syscache
 lib/lib%.so: .build/lib/lib%.so.dl $(objs_lib)
 	@echo - Second linking of shared library $@
 	@mkdir -p $(tdir)
-	$(CC) -shared -o $@ -Wall -Wl,-rpath,'$$ORIGIN/../lib' $(filter %.o, $^) -L$(LIB) $(patsubst .build/lib/lib%.so.glbs, -l%, $(shell cat $<))
+	$(CC) -shared -o $@ $(LDOPT) -Wall -Wl,-rpath,'$$ORIGIN/../lib' $(filter %.o, $^) -L$(LIB) $(DEFAULT_SHARED_LIST) $(patsubst .build/lib/lib%.so.glbs, -l%, $(shell cat $<))
 
 # Make all libraries
 .PHONY: libsheader
@@ -228,7 +230,7 @@ libs: libsheader libs1
 bin/%: .build/bin/%.dl $(objs_prg)
 	@echo - Building program $@ depends on $^
 	@mkdir -p $(tdir)
-	$(CC) -o $@ -Wl,-rpath,'$$ORIGIN/../lib' -L$(LIB) $(filter %.o, $^) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
+	$(CC) -o $@ $(LDOPT) -Wl,-rpath,'$$ORIGIN/../lib' -L$(LIB) $(filter %.o, $^) $(DEFAULT_SHARED_LIST) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
 
 # Make all applications
 .PHONY: bins
@@ -249,7 +251,7 @@ bins: $(BINS)
 test/bin/%: .build/test/bin/%.dl $(objs_tst)
 	@echo - Building test program $@ depends on $^
 	@mkdir -p $(tdir)
-	$(CC) -o $@ -Wl,-rpath,'$$ORIGIN/../../lib' -L$(LIB) $(filter %.o, $^) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
+	$(CC) -o $@ $(LDOPT) -Wl,-rpath,'$$ORIGIN/../../lib' -L$(LIB) $(filter %.o, $^) $(DEFAULT_SHARED_LIST) $(patsubst lib%.so.glbs, -l%, $(shell cat $< | rev | cut -f1 -d / | rev))
 
 
 # VSCode targets ##############################################################
