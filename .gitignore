@@ -30,3 +30,11 @@
 # ... and also add documentation
 !doc/
 !doc/**/*.md
+!.doc
+!doc/**/.doc
+!doc/**/README.md
+!doc/**/LICENSE
+
+# ... and finaly provide flexibility to control additional directories
+!*/
+!**/.gitignore
