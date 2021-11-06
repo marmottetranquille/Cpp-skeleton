@@ -37,14 +37,14 @@ history:
 Template files are located in `include`, `src/bin`, `src/lib`, `test/src` and
 can be removed or renamed before being modified.  
 The comprehensive template file list and pre-canned commands can be found
-[here](.doc/Cpp-skeleton/TemplatesList.md).
+[here](doc/Cpp-skeleton/TemplatesList.md).
 
 ### Start coding
 
 Put you header files in `include` directory and your source files in `src/bin`
 directory.
 
-Note: Read [Project structure](.doc/Cpp-skeleton/ProjectStructure.md) for
+Note: Read [Project structure](doc/Cpp-skeleton/ProjectStructure.md) for
 more details on controlling the output.
 
 ### Build your stuff
@@ -54,16 +54,16 @@ and debug menu.
 
 From a terminal, run the command `make bins` from the repository's root.
 
-Note: *Reading [Project structure](.doc/Cpp-skeleton/ProjectStructure.md)
-and [Makefile usage](.doc/Cpp-skeleton/MakeFileUsage.md) or
-[VSCode usage](.doc/Cpp-skeleton/VSCodeUsage.md) detailed documentation is
+Note: *Reading [Project structure](doc/Cpp-skeleton/ProjectStructure.md)
+and [Makefile usage](doc/Cpp-skeleton/MakeFileUsage.md) or
+[VSCode usage](doc/Cpp-skeleton/VSCodeUsage.md) detailed documentation is
 recommanded*.
 
 ## Release
 
 ## Detailed documentation
 
-* [Project structure](.doc/Cpp-skeleton/ProjectStructure.md)
-* [Makefile usage](.doc/Cpp-skeleton/MakeFileUsage.md)
-* [VSCode usage](.doc/Cpp-skeleton/VSCodeUsage.md)
-* [Documentation storage](.doc/Cpp-skeleton/DocumentationStorage.md)
+* [Project structure](doc/Cpp-skeleton/ProjectStructure.md)
+* [Makefile usage](doc/Cpp-skeleton/MakeFileUsage.md)
+* [VSCode usage](doc/Cpp-skeleton/VSCodeUsage.md)
+* [Documentation storage](doc/Cpp-skeleton/DocumentationStorage.md)

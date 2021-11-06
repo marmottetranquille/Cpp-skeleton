@@ -30,8 +30,7 @@
 # ... and also add documentation
 !doc/
 !doc/**/*.md
-!.doc
-!doc/**/.doc
+!doc/**/doc
 !doc/**/README.md
 !doc/**/LICENSE
 
